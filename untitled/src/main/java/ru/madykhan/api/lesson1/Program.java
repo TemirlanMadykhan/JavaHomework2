@@ -4,58 +4,56 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Program {
-
-/*Дана строка sql-запроса "select * from students where ". 
-*Сформируйте часть WHERE этого запроса, используя StringBuilder. 
-*Данные для фильтрации приведены ниже в виде json-строки.
-*Если значение null, то параметр не должен попадать в запрос.
-*Параметры для фильтрации: {"name":"Ivanov", "country":"Russia", 
-*"city":"Moscow", "age":"null"} */
-   // public static void main(String[] args) {
-   //      Map<String, String> params1 = new HashMap<String,String>();
-   //      params1.put("name","Temirlan");
-   //      params1.put("country","Russia");
-   //      params1.put("city","Moscow");
-   //      params1.put("age",null);
-   //      System.out.println(getQuery(params1));
-   //  }
-   //  public static String getQuery(Map<String, String> params)
-   //  {
-   //      StringBuilder s = new StringBuilder();
-   //      for (Map.Entry<String,String> pair : params.entrySet())
-   //      {
-   //          if (pair.getValue() != null)
-   //          {
-   //              s.append(pair.getKey() +" = '" + pair.getValue()+"' and ");
-   //          }
-   //      }
-   //      s.delete(s.toString().length()-5,s.toString().length());
-   //      return s.toString();
-   //  }
-
-
-/*Реализуйте алгоритм сортировки пузырьком числового массива, 
-*результат после каждой итерации запишите в лог-файл. */
-   public static void main(String[] args) {
-        int [] mas = {22, 4, 25, 29, 9};
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n;
+        do {
+            System.out.print("Введите длинну массива (n >= 2): ");
+            n = sc.nextInt();
+        } while (n < 2);
+        int[] array = createRandomArray(n, 1, 9);
  
-        boolean isSorted = false;
-        int buf;
-        while(!isSorted) {
-            isSorted = true;
-            for (int i = 0; i < mas.length-1; i++) {
-                if(mas[i] > mas[i+1]){
-                    isSorted = false;
+        System.out.println("Дан массив: " + Arrays.toString(array));
  
-                    buf = mas[i];
-                    mas[i] = mas[i+1];
-                    mas[i+1] = buf;
-                }
+        int[] arrayZero = evenElementsMakeZero(Arrays.copyOf(array, array.length));
+        System.out.println("Обнуляем чётные элементы: " + Arrays.toString(arrayZero));
+ 
+        int[] arrayDelete = deleteEvenElement(Arrays.copyOf(array, array.length));
+        System.out.println("Удаляем чётные элементы массива: " + Arrays.toString(arrayDelete));
+    }
+ 
+    //СОЗДАЁМ МАССИВ ЗАДАННОЙ ДЛИННЫ И ЗАПОЛНЯЕМ СЛУЧАЙНЫМИ ЧИСЛАМИ ОТ MIN ДО MAX (ВКЛЮЧИТЕЛЬНО)
+    public static int[] createRandomArray(int length, int min, int max) {
+        int[] result = length > 0 ? new int[length] : new int[0];
+        if (length > 0) {
+            Random rand = new Random();
+            for (int index = 0; index < length; index++) {
+                result[index] = rand.nextInt(Math.abs(max - min) + 1) + min;
             }
         }
-        System.out.println(Arrays.toString(mas));
+        return result;
+    }
+ 
+    public static int[] evenElementsMakeZero(int[] array) {
+        int index = 0;
+        while (index < array.length) {
+            array[index] = 0;
+            index += 2;
+        }
+        return array;
+    }
+ 
+    public static int[] deleteEvenElement(int[] array) {
+        int[] result = new int[array.length / 2];
+        int index = 1;
+        for (int i = 0; i < result.length; i++) {
+            result[i] = array[index];
+            index += 2;
+        }
+        return result;
     }
 }
